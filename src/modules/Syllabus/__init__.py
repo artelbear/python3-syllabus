@@ -5,7 +5,7 @@
 # Описал класс Киселев Николай
 
 
-import os
+import os, time
 
 
 class Syllabus:
@@ -15,11 +15,11 @@ class Syllabus:
 
     def __init__(self, dict_or_path):
         # Обработка значения, которое должно стать основным параметром этого
-        # класса. В конце любого из условий записывает в .raw СЛОВАРЬ (описание
+        # класса. В конце любого из условий записывает в .storage СЛОВАРЬ (описание
         # в docs). Если это уже составленный "syllabus" в виде словоря, запись
         # происходи мгновенно ( # 1 ). Если это путь, то происходит построение
         # абсолютного пути к файлу, чтение файла и превращение в словарь, затем
-        # запись в .raw ( # 2 )
+        # запись в .storage ( # 2 )
 
         # разметка читаемого сжатого расписания
         self.markup = \
@@ -33,19 +33,19 @@ class Syllabus:
 
         if type(dict_or_path) is dict:
             # 1
-            self.raw = dict_or_path
+            self.storage = dict_or_path
         elif type(dict_or_path) is str:
             # 2
             s = open(dict_or_path, 'r')
             s_dict = s.read()
             s.close()
             dictionary = eval(s_dict)
-            self.raw = dictionary
+            self.storage = dictionary
         self.cashe = self.write_cashe()
 
     def __str__(self):
         # Настройка вывода класса через print(syllabus)
-        return str(self.raw)
+        return str(self.storage)
 
     # Здесь будет информация описанная ниже
     #   These are the so-called “rich comparison” methods. The correspondence
@@ -56,7 +56,7 @@ class Syllabus:
     def __eq__(self, other):
         # Реакция на логическую операцию равенства "=="
         try:
-            if self.raw == other.raw:
+            if self.storage == other.storage:
                 return True
             else:
                 return False
@@ -64,26 +64,50 @@ class Syllabus:
             raise ValueError("{} is not syllabus".format(other))
 
     def __getitem__(self, keys):
-        if type(keys) == tuple:
+        # Реакция на вызов через syllabus[x] (#1)
+        # Добавленна подержка обращения через syllabus[x, y] (#2)
+        if type(keys) == str:
+            # 1
+            return self.storage[keys]
+        elif type(keys) == tuple:
+            # 2
             try:
-                return self.raw[keys[0]][keys[1]]
+                return self.storage[keys[0]][keys[1]]
             except:
-                raise ValueError("[{}] is not valid syllabus key".format(str(keys)))
-        elif type(keys) == str:
-            return self.raw[keys]
+                raise ValueError("[{}] is not valid syllabus key. (__getitem__)".format(str(keys)))
         else:
-            raise ValueError("[{}] is not valid syllabus key".format(str(keys)))
+            raise ValueError("[{}] is not valid syllabus key. (__getitem__)".format(str(keys)))
         
+    def __setitem__(self, keys, value):
+        # Реакция на вызов через syllabus[x] = "data" (#1)
+        # Добавленна подержка обращения через syllabus[x, y] = "data" (#2)
+        if type(keys) == str:
+            # 1
+            self.storage[keys] = value
+        elif type(keys) == tuple:
+            # 2
+            try:
+                self.storage[keys[0]][keys[1]] = value
+            except:
+                raise ValueError("[{}] is not valid syllabus key. (__setitem__)".format(str(keys)))
+        else:
+            raise ValueError("[{}] is not valid syllabus key. (__setitem__)".format(str(keys)))
 
     def com(self):
-        m = self.markup
-        s = self.raw
+        # Компиляция в чистую и красивую таблицу вызываемую через eval("...") возращает обычный словарь
+        m = self.markup # обозначение в голове документа
+        s = self.storage
+        # Загрузка модуля для превода таблиц в читаемую строку (модуль pprint)
         s = __import__("pprint").pformat(s, depth=2, width=50)
-        m = m.format(self["meta", "author"], self["meta", "created"], self["meta", "year"], self["meta", "semester"])
+        # Времяштамп в приличное время
+        time_creation = time.ctime(float(self["meta", "created"]))
+        # Введение комментариев для будуещего ффайла (автор и так далее)
+        m = m.format(self["meta", "author"], time_creation, self["meta", "year"], self["meta", "semester"])
         return m + s
 
     def make(self):
-        pass
+        self["meta", "created"] = time.time()
+        return self.com()
 
     def read(self):
         pass
@@ -97,10 +121,13 @@ class Syllabus:
         self.cashe_path = cashe_path
         return cashe_path
 
-    def write(self, name, path=os.getcwd()):
+    def write(self, name, path=os.getcwd(), make=True):
         try:
             position = open(self.cashe_path, 'w')
-            position.write(self.com())
+            if make == True:
+                position.write(self.make())
+            else:
+                position.write(self.com())
             position.close()
             self.exit()
         except:
@@ -109,4 +136,6 @@ class Syllabus:
 
     def exit(self):
         # Убираем кэш
-        os.remove(self.cashe_path)
+        if self.cashe_path != "allready":
+            os.remove(self.cashe_path)
+            self.cashe_path = "allready"
