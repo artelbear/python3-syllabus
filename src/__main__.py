@@ -1,7 +1,6 @@
 from modules.Syllabus import *
-from modules.TeacherClass import *
+from modules.Teacher import *
 
 main = Syllabus("example.syllabus")
 
-main[2, 23]
-print(main)
+main.write("example")

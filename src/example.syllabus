@@ -1,25 +1,17 @@
-# timestamp: 0000000000000000000
 # autor: Elvis
+# created: 1514883908
+# application: https://github.com/artelbear/python3-syllabus
 # year: 2018
 # semester: 2
-# application: https://github.com/artelbear/python3-syllabus
 
-dict(
-	meta = {
-		"bar": 1,
-		"foo": 2 },
-	teachers = {
-		"bar": 1,
-		"foo": 2 },
-	lessons = {
-		"bar": 1,
-		"foo": 2 },
-	grid = {
-		"groups": 1,
-		"days": 1,
-		"even_and_odd_support": True },
-	
-	data = "ТУТ ДОЛЖН БЫТЬ ДАТА ЗАПОКОВАННАЯ ЧЕРЕЗ srt.join(list) ЛИСТ",
-
-	secured = False
-)
+{'data': {},
+ 'lessons': {},
+ 'meta': {'author': 'Elvis',
+          'created': '1514883908',
+          'semester': 2,
+          'year': '2018'},
+ 'secured': False,
+ 'settings': {'days': 1,
+              'even_and_odd_week': True,
+              'groups': 1},
+ 'teachers': {}}

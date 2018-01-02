@@ -21,6 +21,16 @@ class Syllabus:
         # абсолютного пути к файлу, чтение файла и превращение в словарь, затем
         # запись в .raw ( # 2 )
 
+        # разметка читаемого сжатого расписания
+        self.markup = \
+"""# autor: {0}
+# created: {1}
+# application: https://github.com/artelbear/python3-syllabus
+# year: {2}
+# semester: {3}
+
+"""
+
         if type(dict_or_path) is dict:
             # 1
             self.raw = dict_or_path
@@ -31,6 +41,7 @@ class Syllabus:
             s.close()
             dictionary = eval(s_dict)
             self.raw = dictionary
+        self.cashe = self.write_cashe()
 
     def __str__(self):
         # Настройка вывода класса через print(syllabus)
@@ -54,7 +65,22 @@ class Syllabus:
 
     def __getitem__(self, keys):
         if type(keys) == tuple:
-            pass
+            try:
+                return self.raw[keys[0]][keys[1]]
+            except:
+                raise ValueError("[{}] is not valid syllabus key".format(str(keys)))
+        elif type(keys) == str:
+            return self.raw[keys]
+        else:
+            raise ValueError("[{}] is not valid syllabus key".format(str(keys)))
+        
+
+    def com(self):
+        m = self.markup
+        s = self.raw
+        s = __import__("pprint").pformat(s, depth=2, width=50)
+        m = m.format(self["meta", "author"], self["meta", "created"], self["meta", "year"], self["meta", "semester"])
+        return m + s
 
     def make(self):
         pass
@@ -62,7 +88,25 @@ class Syllabus:
     def read(self):
         pass
 
-    def write(self, path, name):
-        syllabus_not_parsed = open(path, 'r')
-        sylla_dict = syllabus_not_parsed.read()
-        syllabus_not_parsed.close()
+    def write_cashe(self):
+        name = "__cashe.syllabus"
+        position = open(name, 'w')
+        position.write(self.com())
+        position.close()
+        cashe_path = "{}/{}".format(os.getcwd(), name)
+        self.cashe_path = cashe_path
+        return cashe_path
+
+    def write(self, name, path=os.getcwd()):
+        try:
+            position = open(self.cashe_path, 'w')
+            position.write(self.com())
+            position.close()
+            self.exit()
+        except:
+            raise FileNotFoundError(
+                "Cant create file {}/{}.syllabus\nCan you put valid adress PLEASE!".format(path, name))
+
+    def exit(self):
+        # Убираем кэш
+        os.remove(self.cashe_path)
