@@ -1,13 +1,13 @@
-# autor: Elvis
-# created: 1514883908
+# autor: Kiselev Nikolay
+# created: Tue Jan  2 22:18:23 2018
 # application: https://github.com/artelbear/python3-syllabus
 # year: 2018
 # semester: 2
 
 {'data': {},
  'lessons': {},
- 'meta': {'author': 'Elvis',
-          'created': '1514883908',
+ 'meta': {'author': 'Kiselev Nikolay',
+          'created': 1514920703.8817263,
           'semester': 2,
           'year': '2018'},
  'secured': False,
