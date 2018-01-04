@@ -1,6 +1,4 @@
 # Модуль класса "Syllabus" с методами
-# ......
-# ......
 
 # Описал класс Киселев Николай
 
@@ -10,9 +8,11 @@ import time
 
 
 class Syllabus:
-    # Класс для создания объекта "Расписание" подерживающие создание методом
-    # syllabus(dictianary), а также загрузку из файла методом
-    # syllabus("./example.syllabus")
+    """
+    Класс для создания объекта "Расписание" подерживающие создание методом
+    syllabus(dictianary), а также загрузку из файла методом
+    syllabus("./example.syllabus")
+    """
 
     def __init__(self, dict_or_path):
         # Обработка значения, которое должно стать основным параметром этого
@@ -22,7 +22,7 @@ class Syllabus:
         # абсолютного пути к файлу, чтение файла и превращение в словарь, затем
         # запись в .storage ( # 2 )
 
-        # разметка читаемого сжатого расписания
+        # разметка заголовка читаемого сжатого расписания
         self.markup = \
             """# autor: {0}
 # created: {1}
@@ -47,12 +47,6 @@ class Syllabus:
     def __str__(self):
         # Настройка вывода класса через print(syllabus)
         return str(self.storage)
-
-    # Здесь будет информация описанная ниже
-    #   These are the so-called “rich comparison” methods. The correspondence
-    #   between operator symbols and method names is as follows: x<y calls
-    #   x.__lt__(y), x<=y calls x.__le__(y), x==y calls x.__eq__(y), x!=y calls
-    #   x.__ne__(y), x>y calls x.__gt__(y), and x>=y calls x.__ge__(y).
 
     def __eq__(self, other):
         # Реакция на логическую операцию равенства "=="
@@ -152,7 +146,8 @@ class Syllabus:
                 "Cant create file {}/{}.syllabus\nCan you put valid adress PLEASE!".format(path, name))
 
     def html(self):
-        # Преобразование в простой html код (предназначенный для помещения в теге "body")
+        # Преобразование в простой html код (предназначенный для помещения в
+        # теге "body")
         body_html = self.com()
         body_html = body_html.replace(" ", "&nbsp;")
         body_html = body_html.replace("\n", "\n\t\t<br>\n\t\t")
