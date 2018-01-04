@@ -7,19 +7,19 @@
 
 # Класс Пара                          (Занятие)                       --- kn
 
-# from .kn import kn
+from .kn import Kn
 
 
 
 # Класс Пары                          (Линия Занятий)                 --- impkn
 
-# from .impkn import impkn
+from .impkn import Impkn
 
 
 
 # Класс НеделяПар                     (Коллекция Линий Занятий)       --- weekimpkn
 
-# from .weekimpkn import weekimpkn
+from .weekimpkn import Weekimpkn
 
 
 
@@ -31,22 +31,22 @@
 
 # Класс Учитель                       (Преподаватель)                 --- teacher
 
-from .teacher import teacher
+from .teacher import Teacher
 
 
 
 # Класс Урок                          (Предмет)                       --- lesson
 
-# from .lesson import lesson
+from .lesson import Lesson
 
 
 
 # Класс Группа                        (Студенты)                      --- grup
 
-# from .grup import grup
+from .grup import Grup
 
 
 
 # Класс Кабинет                       (Помещение)                     --- room
 
-# from .room import room
+from .room import Room
